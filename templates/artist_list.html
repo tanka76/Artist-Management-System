@@ -1,29 +1,6 @@
 {% extends 'base.html' %}
 {%block content%}
 
-<!-- modal start -->
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="myModalLabel">Delete Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this item?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- modal end -->
 
 <div class="body-wrapper">
     <!--  Header Start -->
@@ -80,7 +57,7 @@
                     <tr>
                       <td class="border-bottom-0"><h6 class="fw-semibold mb-0">{{forloop.counter}}</h6></td>
                       <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-1">{{object.name}}</h6>                      
+                          <a href="#"><h6 class="fw-semibold mb-1">{{object.name}}</h6></a>                   
                       </td>
                       <td class="border-bottom-0">
                         <div class="d-flex align-items-center gap-2">
@@ -104,6 +81,7 @@
                       <td class="border-bottom-0">
                         <a href="{% url 'artist:artist_update_view' object.pk %}" class="btn btn-info m-1">Update</a>
                         <a href="{% url 'artist:artist_delete_view' object.pk %}" class="btn btn-danger m-1">Delete</a>
+                        <a href="{% url 'artist:artist_detail_view' object.pk %}" class="btn btn-success m-1">View</a>
                       </td>
                     </tr> 
                   {% endfor %}                   

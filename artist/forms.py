@@ -18,3 +18,14 @@ class ArtistForm(BaseForm,forms.ModelForm):
             "number_of_albums_released"
 
         ]
+
+class MusicForm(BaseForm,forms.ModelForm):
+    class Meta:
+        model = Music
+        fields = [
+            "title",
+            "album_name",
+            "genre"
+
+
+        ]
