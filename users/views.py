@@ -17,7 +17,9 @@ class Dashboard(IsLoggedInMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         return context
 
-
+def logout_user(request):
+    logout(request)
+    return redirect(reverse_lazy("users:login_view"))
 
 class LoginView(View):
     template_name = "registration/login.html"
