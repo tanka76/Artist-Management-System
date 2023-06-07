@@ -103,7 +103,7 @@
                       </td>
                       <td class="border-bottom-0">
                         <a href="{% url 'artist:artist_update_view' object.pk %}" class="btn btn-info m-1">Update</a>
-                        <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#myModal">Delete</button>
+                        <a href="{% url 'artist:artist_delete_view' object.pk %}" class="btn btn-danger m-1">Delete</a>
                       </td>
                     </tr> 
                   {% endfor %}                   
