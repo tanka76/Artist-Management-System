@@ -29,7 +29,6 @@
                         <form class="p-4" enctype="multipart/form-data" method="POST" id="okkkk">
                             <div class="row">
                             
-                            
                               {% for field in user_form.visible_fields %}
                             
                               {% if field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "datetime-local" or field.field.widget.input_type == "url" or field.field.widget.input_type == "email" or field.field.widget.input_type == "date" %}
@@ -84,9 +83,6 @@
                                               </p>
                                               </div>
                                             {% endfor %}
-                            
-                            
-                            
                             
                                 {% csrf_token %}
                             
