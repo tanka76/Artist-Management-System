@@ -31,7 +31,7 @@ class CustomLoginForm(AuthenticationForm):
         self.user = user
         return username
 
-class UserCreateForm(BaseForm,forms.ModelForm):
+class UserRegisterForm(BaseForm,forms.ModelForm):
     class Meta:
         model = AuthUser
         fields = ["first_name","last_name","phone_number","email","password","is_staff"]
@@ -54,3 +54,19 @@ class UserCreateForm(BaseForm,forms.ModelForm):
 
     
 
+class UserCreateForm(BaseForm,forms.ModelForm):
+    class Meta:
+        model = AuthUser
+        fields = ["first_name","last_name","phone_number","gender","address","dob","email","password","is_staff","is_superuser"]
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if AuthUser.objects.filter(username=email).exists():
+            raise ValidationError("Email with this user already exists")
+        return email
+    
+
+class UserUpdateForm(BaseForm, forms.ModelForm):
+    class Meta:
+        model = AuthUser
+        fields = ["first_name","last_name","phone_number","gender","address","dob","email","is_staff","is_superuser"]
