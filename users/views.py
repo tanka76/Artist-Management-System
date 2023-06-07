@@ -2,9 +2,10 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import FormView,CreateView,TemplateView,UpdateView
+from django.views.generic import FormView,CreateView,TemplateView,UpdateView,ListView,DeleteView
 from .forms import LoginForm,UserRegisterForm,CustomLoginForm,UserCreateForm,UserUpdateForm
 from users.permissions import IsLoggedInMixin
 from .models import AuthUser
@@ -20,7 +21,7 @@ class UserMixin(IsLoggedInMixin):
     success_url = reverse_lazy("users:dashboard")
 
 class Dashboard(IsLoggedInMixin, TemplateView):
-    template_name = "user_list.html"
+    template_name = "index.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['users']=AuthUser.objects.all()
@@ -69,6 +70,10 @@ class UserRegisterView(CreateView):
         return super().form_invalid(form)
     
 
+class UserListView(UserMixin, ListView):
+    form_class = UserCreateForm
+    template_name = "user_list.html"
+
 class UserCreateView(UserMixin, CreateView):
     form_class = UserCreateForm
     template_name = "user_create.html"
@@ -85,10 +90,20 @@ class UserCreateView(UserMixin, CreateView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        print("Erroor============",form.errors)
         return super().form_invalid(form)
     
 
 class UserUpdateView(UserMixin, UpdateView):
     form_class = UserUpdateForm
     template_name = "update.html"
+
+
+class UserDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        obj = get_object_or_404(AuthUser, pk=kwargs['pk'])
+        obj.is_deleted = True
+        obj.save()
+        return redirect(reverse_lazy("users:user_view"))
+    
+

@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import FormView,CreateView,TemplateView,UpdateView,ListView
+from django.views.generic import FormView,CreateView,TemplateView,UpdateView,ListView,View
 from users.permissions import IsLoggedInMixin
 from .models import Artist,Music
 from .forms import ArtistForm
@@ -28,3 +28,12 @@ class ArtistCreateView(ArtistMixin, CreateView):
 class ArtistUpdateView(ArtistMixin, UpdateView):
     form_class = ArtistForm
     template_name = "update.html"
+
+
+class ArtistDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        obj = get_object_or_404(Artist, pk=kwargs['pk'])
+        obj.is_deleted = True
+        obj.save()
+        return redirect(reverse_lazy("artist:artist_view"))
