@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{%block content%}
+
+<!-- modal start -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Delete Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this item?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal end -->
+
+<div class="body-wrapper">
+    <!--  Header Start -->
+    <header class="app-header">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <h4>Artist Management</h4>
+        <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+          <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+            <a href="{% url 'artist:artist_create_view' %}" class="btn btn-primary">Create</a>
+            <li class="nav-item dropdown">
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <!--  Header End -->
+      <div class="row">
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body p-4">
+              <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
+              <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Id</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Name</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Gender</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Address</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Date Of Birth</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">First Release Year</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Number Of Albums</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Action</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for object in object_list %}
+                    <tr>
+                      <td class="border-bottom-0"><h6 class="fw-semibold mb-0">{{forloop.counter}}</h6></td>
+                      <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-1">{{object.name}}</h6>                      
+                      </td>
+                      <td class="border-bottom-0">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge bg-primary rounded-3 fw-semibold">{{object.get_gender_display}}</span>
+                        <!-- <h6 class="fw-semibold mb-1">{{object.get_gender_display}}</h6>                       -->
+
+                        </div>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0 fs-4">{{object.address}}</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0 fs-4">{{object.dob}}</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0 fs-4">{{object.first_release_year}}</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0 fs-4">{{object.number_of_albums_released}}</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <a href="{% url 'artist:artist_update_view' object.pk %}" class="btn btn-info m-1">Update</a>
+                        <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#myModal">Delete</button>
+                      </td>
+                    </tr> 
+                  {% endfor %}                   
+                  </tbody>
+                </table>
+              </div>
+              {%if users%}
+              {% include 'pagination.html' %}
+              {%endif%}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="py-6 px-6 text-center">
+        <p class="mb-0 fs-4">Artist Management System<a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline"></a></p>
+      </div>
+  </div>
+
+{%endblock%}

@@ -12,6 +12,7 @@ from .models import AuthUser
 
 # Create your views here.
 
+
 class UserMixin(IsLoggedInMixin):
     model = AuthUser
     paginate_by = 10
