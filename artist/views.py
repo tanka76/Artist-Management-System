@@ -92,3 +92,6 @@ class MusicDeleteView(View):
         obj.is_deleted = True
         obj.save()
         return redirect(reverse_lazy("artist:artist_detail_view",kwargs={"pk": obj.artist.id}))
+
+
+#csv import export views
