@@ -18,7 +18,7 @@ class UserMixin(IsLoggedInMixin):
     model = AuthUser
     paginate_by = 10
     queryset = AuthUser.objects.filter(is_deleted=False)
-    success_url = reverse_lazy("users:dashboard")
+    success_url = reverse_lazy("users:user_view")
 
 class Dashboard(IsLoggedInMixin, TemplateView):
     template_name = "index.html"
@@ -73,6 +73,8 @@ class UserRegisterView(CreateView):
 class UserListView(UserMixin, ListView):
     form_class = UserCreateForm
     template_name = "user_list.html"
+    paginate_by = 4
+
 
 class UserCreateView(UserMixin, CreateView):
     form_class = UserCreateForm
