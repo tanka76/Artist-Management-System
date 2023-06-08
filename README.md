@@ -16,7 +16,7 @@ $ source venv/bin/activate
 Then install the dependencies:
 
 ```sh
-(env)$ pip install -r requirements.txt
+(venv)$ pip install -r requirements.txt
 ```
 Note the `(venv)` in front of the prompt. This indicates that this terminal
 session operates in a virtual environment
