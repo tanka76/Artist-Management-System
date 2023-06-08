@@ -19,6 +19,8 @@ class ArtistMixin(IsLoggedInMixin):
 class ArtistListView(ArtistMixin, ListView):
     template_name = "artist_list.html"
     queryset = Artist.objects.filter(is_deleted=False)
+    paginate_by = 4
+
 
 
 class ArtistCreateView(ArtistMixin, CreateView):
