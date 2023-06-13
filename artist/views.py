@@ -2,7 +2,7 @@ import csv
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
-
+from io import TextIOWrapper
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import FormView,CreateView,TemplateView,UpdateView,ListView,View,DetailView
@@ -99,18 +99,20 @@ class MusicDeleteView(View):
 
 #csv import export views
 @is_logged_in
-def upload_csv(request, pk):
+def import_csv(request):
     if request.method == "POST":
         csv_file = request.FILES.get("csv_file")
         if not csv_file.name.endswith(".csv"):
-            print("Invalid Format===============")
-            messages.error(request, "Invalid Format")
-        with open(csv_file, 'r') as csv_file:
-            csv_reader = csv.reader(csv_file)
-            next(csv_reader)
-            for row in csv_reader:
-                artist = Artist.objects.create(name=row[0],address=row[1],gender=row[2],dob=row[3],number_of_albums_released=row[4],first_release_year=row[5])                
-                artist.save() 
+            messages.error(request, "Invalid Format. Please upload CSV file")
+            return redirect(request.META.get("HTTP_REFERER"))
+        csv_file = TextIOWrapper(csv_file.file, encoding='utf-8')
+        reader = csv.reader(csv_file)
+        header = next(reader)
+        for row in reader:
+            if len(row)==0:
+                continue
+            artist=Artist(name=row[0],address=row[1],dob=row[2],gender=row[3],number_of_albums_released=row[4],first_release_year=row[5])
+            artist.save()
         messages.success(request, "Succesfully Uplaod Csv file")
     return redirect(request.META.get("HTTP_REFERER"))
 
@@ -127,6 +129,7 @@ def export_to_csv(request):
             for artist in artists:
                 writer.writerow([artist.name, artist.address, artist.dob,artist.gender,artist.number_of_albums_released,artist.first_release_year])
         except Exception as e:
+            messages.error(request, "Error while Exporting CSV")
             print("Error",e)
 
         return response

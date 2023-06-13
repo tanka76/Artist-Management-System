@@ -5,17 +5,17 @@
 <div class="body-wrapper">
     <!--  Header Start -->
     <div class="row"  style="margin-bottom: 120px;">
-
       <header class="app-header">
         <nav class="navbar navbar-expand-lg navbar-light">
           <h4>Artist Management</h4>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <form action="#" method="POST" enctype="multipart/form-data">
+              <form action="{% url 'artist:artist_import_csv'%}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="file" name="file" id="file-upload" >
-                <button href="{% url 'artist:artist_export_csv' %}" class="btn btn-primary" style="margin-right: 10px;">Import CSV</button>
+                <input type="file" name="csv_file" required id="file-upload" >
+                <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Import CSV</button>
               </form>
+
                 <a href="{% url 'artist:artist_export_csv' %}" class="btn btn-primary" style="margin-right: 10px;">Export CSV</a>
                 <a href="{% url 'artist:artist_create_view' %}" class="btn btn-primary">Create</a>
           
@@ -23,9 +23,16 @@
           </div>
         </nav>
       </header>
-
-
     </div>
+    <div class="row">
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="display: block;text-align: center;">{{ message }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
 
     <!--  Header End -->
       <div class="row">

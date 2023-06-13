@@ -2,3 +2,13 @@
     color: red;
    
   }
+
+ul.messages li.error {
+    color: red;
+    font-weight: bold;
+}
+
+ul.messages li.success {
+  color: green;
+  font-weight: bold;
+}
