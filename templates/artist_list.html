@@ -4,24 +4,35 @@
 
 <div class="body-wrapper">
     <!--  Header Start -->
-    <header class="app-header">
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <h4>Artist Management</h4>
-        <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-          <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-            <a href="{% url 'artist:artist_create_view' %}" class="btn btn-primary">Create</a>
-            <li class="nav-item dropdown">
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
+    <div class="row"  style="margin-bottom: 120px;">
+
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <h4>Artist Management</h4>
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+              <form action="#" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file" id="file-upload" >
+                <button href="{% url 'artist:artist_export_csv' %}" class="btn btn-primary" style="margin-right: 10px;">Import CSV</button>
+              </form>
+                <a href="{% url 'artist:artist_export_csv' %}" class="btn btn-primary" style="margin-right: 10px;">Export CSV</a>
+                <a href="{% url 'artist:artist_create_view' %}" class="btn btn-primary">Create</a>
+          
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+
+    </div>
+
     <!--  Header End -->
       <div class="row">
         <div class="col-lg-12 d-flex align-items-stretch">
           <div class="card w-100">
             <div class="card-body p-4">
-              <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
+              <h5 class="card-title fw-semibold mb-4">Recent Artist</h5>
               <div class="table-responsive">
                 <table class="table text-nowrap mb-0 align-middle">
                   <thead class="text-dark fs-4">
