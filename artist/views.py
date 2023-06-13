@@ -1,9 +1,12 @@
+import csv
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
+from django.contrib import messages
+from io import TextIOWrapper
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import FormView,CreateView,TemplateView,UpdateView,ListView,View,DetailView
-from users.permissions import IsLoggedInMixin
+from users.permissions import IsLoggedInMixin,is_logged_in
 from .models import Artist,Music
 from .forms import ArtistForm,MusicForm
 
@@ -95,3 +98,38 @@ class MusicDeleteView(View):
 
 
 #csv import export views
+@is_logged_in
+def import_csv(request):
+    if request.method == "POST":
+        csv_file = request.FILES.get("csv_file")
+        if not csv_file.name.endswith(".csv"):
+            messages.error(request, "Invalid Format. Please upload CSV file")
+            return redirect(request.META.get("HTTP_REFERER"))
+        csv_file = TextIOWrapper(csv_file.file, encoding='utf-8')
+        reader = csv.reader(csv_file)
+        header = next(reader)
+        for row in reader:
+            if len(row)==0:
+                continue
+            artist=Artist(name=row[0],address=row[1],dob=row[2],gender=row[3],number_of_albums_released=row[4],first_release_year=row[5])
+            artist.save()
+        messages.success(request, "Succesfully Uplaod Csv file")
+    return redirect(request.META.get("HTTP_REFERER"))
+
+
+@is_logged_in
+def export_to_csv(request):
+    if request.method == "GET":
+        try:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="artist.csv"'
+            writer = csv.writer(response)
+            writer.writerow(['name', 'address','dob','gender','number_of_albums_released','first_release_year'])  
+            artists = Artist.objects.filter(is_deleted=False) 
+            for artist in artists:
+                writer.writerow([artist.name, artist.address, artist.dob,artist.gender,artist.number_of_albums_released,artist.first_release_year])
+        except Exception as e:
+            messages.error(request, "Error while Exporting CSV")
+            print("Error",e)
+
+        return response
